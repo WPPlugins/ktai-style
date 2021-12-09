@@ -2310,7 +2310,7 @@ class KS_Walker_Comment extends Walker {
 	public $tree_type = 'comment';
 	public $db_fields = array ('parent' => 'comment_parent', 'id' => 'comment_ID');
 
-	public function start_lvl(&$output, $depth, $args) {
+	public function start_lvl(&$output, $depth = 0, $args = array() ) {
 		$GLOBALS['comment_depth'] = $depth + 1;
 
 		switch ( $args['style'] ) {
@@ -2329,7 +2329,7 @@ class KS_Walker_Comment extends Walker {
 		}
 	}
 
-	public function end_lvl(&$output, $depth, $args) {
+	public function end_lvl(&$output, $depth = 0, $args = array() ) {
 		$GLOBALS['comment_depth'] = $depth + 1;
 
 		switch ( $args['style'] ) {
@@ -2348,7 +2348,7 @@ class KS_Walker_Comment extends Walker {
 		}
 	}
 
-	public function start_el(&$output, $comment, $depth, $args) {
+	public function start_el(&$output, $comment, $depth = 0, $args = array(), $current_object_id = 0) {
 		$depth++;
 		$GLOBALS['comment_depth'] = $depth;
 
@@ -2401,7 +2401,7 @@ class KS_Walker_Comment extends Walker {
 		));
 	}
 
-	public function end_el(&$output, $comment, $depth, $args) {
+	public function end_el(&$output, $comment, $depth = 0, $args = array() ) {
 		if ( !empty($args['end-callback']) ) {
 			call_user_func($args['end-callback'], $comment, $args, $depth);
 			return;

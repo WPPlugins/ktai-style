@@ -14,7 +14,7 @@ if (file_exists(WP_PLUGIN_DIR . '/wphone') || file_exists(WP_PLUGIN_DIR . '/mobi
  * Erase Location URL for Ktai Location
  */
 function ks_erase_location_url($content) {
-	return preg_replace('!\s*<div class="([-. \w]+ +)?locationurl( +[-. \w]+)?">.*?</div>!se', '"$1$2" ? "<div class=\"$1$2\">$3</div>" : ""', $content);
+	return preg_replace_callback('!\s*<div class="([-. \w]+ +)?locationurl( +[-. \w]+)?">.*?</div>!s', function ($matches) { return $matches[1] . $matches[2] ? '<div class="' . $matches[1] . $matches[2] . '">' . $matches[3] . '</div>' : '' ; }, $content);
 }
 add_filter('the_content', 'ks_erase_location_url', 88);
 

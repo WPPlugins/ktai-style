@@ -410,15 +410,15 @@ class KtaiCategory_Checklist extends Walker {
 //	public $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
 	public $db_fields = array ('parent' => 'category_parent', 'id' => 'cat_ID');
 
-	function start_lvl(&$output, $depth, $args) {
+	function start_lvl(&$output, $depth = 0, $args = array() ) {
 		return '';
 	}
 
-	function end_lvl(&$output, $depth, $args) {
+	function end_lvl(&$output, $depth = 0, $args = array() ) {	
 		return '';
 	}
 
-	function start_el(&$output, $category, $depth, $args) {
+	function start_el(&$output, $category, $depth = 0, $args = array(), $current_object_id = 0) {
 		extract($args);
 
 		$output .= '<dt>' . '<label><input value="' . $category->cat_ID . '" type="checkbox" name="cat[]" ' 
@@ -427,7 +427,7 @@ class KtaiCategory_Checklist extends Walker {
 		return $output;
 	}
 
-	function end_el(&$output, $category, $depth, $args) {
+	function end_el(&$output, $category, $depth = 0, $args = array() ) {
 		$output .= '</dt>';
 		return $output;
 	}
