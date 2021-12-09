@@ -2451,7 +2451,7 @@ public function shrink_post_split($buffer) {
  * @param	boolean $allow_search_engine
  * @return	boolean $in_network
  */
-public function in_network($allow_search_engine = false) {
+public function in_network($allow_search_engine = false, $n = null) {
 	return parent::in_network(NULL, $allow_search_engine);
 }
 

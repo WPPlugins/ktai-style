@@ -360,7 +360,7 @@ public function __construct($user_agent) {
  * @param	boolean $allow_search_engine
  * @return	boolean $in_network
  */
-public function in_network($allow_search_engine = false) {
+public function in_network($allow_search_engine = false, $n = null) {
 	return parent::in_network(self::$networks, $allow_search_engine);
 }
 
