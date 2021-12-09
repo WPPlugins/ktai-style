@@ -1736,9 +1736,9 @@ public function convert_pict($buffer) {
 	);
 	$translated = apply_filters('ktai_pictogram_table', $translated, __CLASS__, $this->charset);
 	$translated = apply_filters('pictogram_table/ktai_style.php', $translated);
-	$buffer = preg_replace(
-		'!<img localsrc="([^"]+)"( alt="(' . KtaiStyle::DOUBLE_QUOTED_STRING_REGEX . ')")?[^/>]*/?>!se', // <?php /* syntax hilighting fix */
-		'isset($translated["$1"]) ? $translated["$1"] : ("$3" ? "$3" : "¬")', 
+	$buffer = preg_replace_callback(
+		'!<img localsrc="([^"]+)"( alt="(' . KtaiStyle::DOUBLE_QUOTED_STRING_REGEX . ')")?[^/>]*/?>!s', // <?php /* syntax hilighting fix */
+		function ($matches) use ($translated) { return isset($translated[$matches[1]]) ? $translated[$matches[1]] : ($matches[3] ? $matches[3] : '¬'); },
 		$buffer);
 	$entities = array(
 		'&spades;' => self::$pictograms['se20e'],

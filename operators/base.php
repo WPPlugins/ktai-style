@@ -1961,7 +1961,7 @@ public function shrink_pre_split($buffer) {
 	$buffer = preg_replace('!/>[\r\n]+!', "/>\n", $buffer);
 	$buffer = preg_replace('![\r\n]+</!', "\n</", $buffer);
 	// ----- restore pre elements -----
-	$buffer = preg_replace('/\376\376\376(\d+)\376\376\376/e', '$pre[$1]', $buffer);
+	$buffer = preg_replace_callback('/\376\376\376(\d+)\376\376\376/', function ($matches) { return $pre[$matches[1]]; }, $buffer);
 	return $buffer;
 }
 
@@ -2012,9 +2012,9 @@ public function convert_pict($buffer) {
 	} else {
 		$charset = get_bloginfo("charset");
 	}
-	$buffer = preg_replace(
-		'!<img localsrc="([^"]+)"( alt="(' . KtaiStyle::DOUBLE_QUOTED_STRING_REGEX . ')")?[^/>]*/?>!se', // <?php /* syntax hilighting fix */
-		'self::pict_replace("$1", "$2", "$3", $charset)', 
+	$buffer = preg_replace_callback(
+		'!<img localsrc="([^"]+)"( alt="(' . KtaiStyle::DOUBLE_QUOTED_STRING_REGEX . ')")?[^/>]*/?>!s', // <?php /* syntax hilighting fix */
+		function ($matches) use ($charset) { return self::pict_replace($matches[1], $matches[2], $matches[3], $charset); },
 		$buffer);
 	return $buffer;
 }
@@ -2428,9 +2428,9 @@ public function __construct($user_agent) {
  * @return	string  $buffer
  */
 public function convert_pict($buffer) {
-	$buffer = preg_replace(
-		'!<img localsrc="([^"]+)"( alt="(' . KtaiStyle::DOUBLE_QUOTED_STRING_REGEX . ')")? ?/?>!se', // <?php /* syntax hilighting fix */
-		'parent::pict_replace("$1", "$2", "$3", $this->charset)', 
+	$buffer = preg_replace_callback(
+		'!<img localsrc="([^"]+)"( alt="(' . KtaiStyle::DOUBLE_QUOTED_STRING_REGEX . ')")? ?/?>!s', // <?php /* syntax hilighting fix */
+		function ($matches) { return parent::pict_replace($matches[1], $matches[2], $matches[3], $this->charset); },
 		$buffer);
 	return $buffer;
 }

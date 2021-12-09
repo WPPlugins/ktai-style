@@ -915,7 +915,7 @@ public function trim_excerpt($text) {
 	$text = $this->strip_styles_scripts_del($text);
 	$text = str_replace(']]>', ']]&gt;', $text);
 	$text = strip_tags($text, '<img>');
-	$text = preg_replace('!<img ([^>]+?)(\blocalsrc="\w+")?([^>]+?)>!e', '"$2" ? "<img $2 />" : ""', $text);
+	$text = preg_replace_callback('!<img ([^>]+?)(\blocalsrc="\w+")?([^>]+?)>!', function ($matches) { return $matches[2] ? '<img ' . $matches[2] . ' />' : ''; }, $text);
 	$len = apply_filters('excerpt_length', KTAI_EXCERPT_LENGTH);
 	if (strlen($text) > $len) {
 		$text = ks_cut_html($text, $len, 0) . apply_filters('excerpt_more', '...');

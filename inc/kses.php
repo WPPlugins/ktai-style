@@ -203,8 +203,8 @@ public function kses_split($string, $allowed_html)
 # matches stray ">" characters.
 ###############################################################################
 {
-	return preg_replace('%((<!--.*?(-->|$))|(<[^\015>]*(>|$)|>))%e',
-	"self::kses_split2('\\1', \$allowed_html)", $string);
+	return preg_replace_callback('%((<!--.*?(-->|$))|(<[^\015>]*(>|$)|>))%',
+	function ($matches) use ($allowed_html) { return self::kses_split2($matches[1], $allowed_html); }, $string);
 } # function kses_split
 
 public function kses_split2($string, $allowed_html)
@@ -575,7 +575,7 @@ public function kses_bad_protocol_once($string)
 # handling whitespace and HTML entities.
 ###############################################################################
 {
-	return preg_replace('/^((&[^;]*;|[\sA-Za-z0-9])*)'.'(:|&#58;|&#[Xx]3[Aa];)\s*/e', 'self::kses_bad_protocol_once2("\\1")', $string);
+	return preg_replace_callback('/^((&[^;]*;|[\sA-Za-z0-9])*)'.'(:|&#58;|&#[Xx]3[Aa];)\s*/', function ($matches){ return self::kses_bad_protocol_once2($matches[1]); }, $string);
 } # function kses_bad_protocol_once
 
 public function kses_bad_protocol_once2($string)
@@ -606,7 +606,7 @@ public function kses_normalize_entities($string)
 	# Change back the allowed entities in our entity whitelist
 
 	$string = preg_replace('/&amp;([A-Za-z][A-Za-z0-9]{0,19});/', '&\\1;', $string);
-	$string = preg_replace('/&amp;#0*([0-9]{1,5});/e', 'self::kses_normalize_entities2("\\1")', $string);
+	$string = preg_replace_callback('/&amp;#0*([0-9]{1,5});/', function ($matches) { return self::kses_normalize_entities2($matches[1]); }, $string);
 	$string = preg_replace('/&amp;#([Xx])0*(([0-9A-Fa-f]{2}){1,2});/', '&#\\1\\2;', $string);
 
 	return $string;
@@ -628,8 +628,8 @@ public function kses_decode_entities($string)
 # URL protocol whitelisting system anyway.
 ###############################################################################
 {
-	$string = preg_replace('/&#([0-9]+);/e', 'chr("\\1")', $string);
-	$string = preg_replace('/&#[Xx]([0-9A-Fa-f]+);/e', 'chr(hexdec("\\1"))', $string);
+	$string = preg_replace_callback('/&#([0-9]+);/', function ($matches) { return chr($matches[1]); }, $string);
+	$string = preg_replace_callback('/&#[Xx]([0-9A-Fa-f]+);/', function ($matches) { return hexdec($matches[1]); }, $string);
 
 	return $string;
 } # function kses_decode_entities
