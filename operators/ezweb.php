@@ -1045,7 +1045,7 @@ public function in_network($allow_search_engine = false, $n = null) {
  * @param	string  $buffer
  * @return	string  $buffer
  */
-public function replace_smiley($buffer) {
+public function replace_smiley($buffer, $smiles = array() ) {
 	$smiles = array(
 		'icon_smile.gif'     => self::$pictograms['257'],
 		'icon_biggrin.gif'   => self::$pictograms['454'], 
